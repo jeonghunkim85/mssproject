@@ -1,0 +1,106 @@
+
+insert into categories (id, name, updated_at, created_at) values
+(1, '상의', current_timestamp(), current_timestamp()),
+(2, '아우터', current_timestamp(), current_timestamp()),
+(3, '바지', current_timestamp(), current_timestamp()),
+(4, '스니커즈', current_timestamp(), current_timestamp()),
+(5, '가방', current_timestamp(), current_timestamp()),
+(6, '모자', current_timestamp(), current_timestamp()),
+(7, '양말', current_timestamp(), current_timestamp()),
+(8, '액세서리', current_timestamp(), current_timestamp())
+;
+
+insert into brands (id, name, created_at, updated_at) values
+(1, 'A', current_timestamp(), current_timestamp()),
+(2, 'B', current_timestamp(), current_timestamp()),
+(3, 'C', current_timestamp(), current_timestamp()),
+(4, 'D', current_timestamp(), current_timestamp()),
+(5, 'E', current_timestamp(), current_timestamp()),
+(6, 'F', current_timestamp(), current_timestamp()),
+(7, 'G', current_timestamp(), current_timestamp()),
+(8, 'H', current_timestamp(), current_timestamp()),
+(9, 'I', current_timestamp(), current_timestamp())
+;
+
+insert into products (category_id, brand_id, price, created_at, updated_at) values
+-- 상의
+(1, 1, 11200, current_timestamp(), current_timestamp()),
+(1, 2, 10500, current_timestamp(), current_timestamp()),
+(1, 3, 10000, current_timestamp(), current_timestamp()),
+(1, 4, 10100, current_timestamp(), current_timestamp()),
+(1, 5, 10700, current_timestamp(), current_timestamp()),
+(1, 6, 11200, current_timestamp(), current_timestamp()),
+(1, 7, 10500, current_timestamp(), current_timestamp()),
+(1, 8, 10800, current_timestamp(), current_timestamp()),
+(1, 9, 11400, current_timestamp(), current_timestamp()),
+-- 아우터
+(2, 1, 5500, current_timestamp(), current_timestamp()),
+(2, 2, 5900, current_timestamp(), current_timestamp()),
+(2, 3, 6200, current_timestamp(), current_timestamp()),
+(2, 4, 5100, current_timestamp(), current_timestamp()),
+(2, 5, 5000, current_timestamp(), current_timestamp()),
+(2, 6, 7200, current_timestamp(), current_timestamp()),
+(2, 7, 5800, current_timestamp(), current_timestamp()),
+(2, 8, 6300, current_timestamp(), current_timestamp()),
+(2, 9, 6700, current_timestamp(), current_timestamp()),
+-- 바지
+(3, 1, 4200, current_timestamp(), current_timestamp()),
+(3, 2, 3800, current_timestamp(), current_timestamp()),
+(3, 3, 3300, current_timestamp(), current_timestamp()),
+(3, 4, 3000, current_timestamp(), current_timestamp()),
+(3, 5, 3800, current_timestamp(), current_timestamp()),
+(3, 6, 4000, current_timestamp(), current_timestamp()),
+(3, 7, 3900, current_timestamp(), current_timestamp()),
+(3, 8, 3100, current_timestamp(), current_timestamp()),
+(3, 9, 3200, current_timestamp(), current_timestamp()),
+-- 스니커즈
+(4, 1, 9000, current_timestamp(), current_timestamp()),
+(4, 2, 9100, current_timestamp(), current_timestamp()),
+(4, 3, 9200, current_timestamp(), current_timestamp()),
+(4, 4, 9500, current_timestamp(), current_timestamp()),
+(4, 5, 9900, current_timestamp(), current_timestamp()),
+(4, 6, 9300, current_timestamp(), current_timestamp()),
+(4, 7, 9000, current_timestamp(), current_timestamp()),
+(4, 8, 9700, current_timestamp(), current_timestamp()),
+(4, 9, 9500, current_timestamp(), current_timestamp()),
+-- 가방
+(5, 1, 2000, current_timestamp(), current_timestamp()),
+(5, 2, 2100, current_timestamp(), current_timestamp()),
+(5, 3, 2200, current_timestamp(), current_timestamp()),
+(5, 4, 2500, current_timestamp(), current_timestamp()),
+(5, 5, 2300, current_timestamp(), current_timestamp()),
+(5, 6, 2100, current_timestamp(), current_timestamp()),
+(5, 7, 2200, current_timestamp(), current_timestamp()),
+(5, 8, 2100, current_timestamp(), current_timestamp()),
+(5, 9, 2400, current_timestamp(), current_timestamp()),
+-- 모자
+(6, 1, 1700, current_timestamp(), current_timestamp()),
+(6, 2, 2000, current_timestamp(), current_timestamp()),
+(6, 3, 1900, current_timestamp(), current_timestamp()),
+(6, 4, 1500, current_timestamp(), current_timestamp()),
+(6, 5, 1800, current_timestamp(), current_timestamp()),
+(6, 6, 1600, current_timestamp(), current_timestamp()),
+(6, 7, 1700, current_timestamp(), current_timestamp()),
+(6, 8, 1600, current_timestamp(), current_timestamp()),
+(6, 9, 1700, current_timestamp(), current_timestamp()),
+-- 양말
+(7, 1, 1800, current_timestamp(), current_timestamp()),
+(7, 2, 2000, current_timestamp(), current_timestamp()),
+(7, 3, 2200, current_timestamp(), current_timestamp()),
+(7, 4, 2400, current_timestamp(), current_timestamp()),
+(7, 5, 2100, current_timestamp(), current_timestamp()),
+(7, 6, 2300, current_timestamp(), current_timestamp()),
+(7, 7, 2100, current_timestamp(), current_timestamp()),
+(7, 8, 2000, current_timestamp(), current_timestamp()),
+(7, 9, 1700, current_timestamp(), current_timestamp()),
+-- 액세서리
+(8, 1, 2300, current_timestamp(), current_timestamp()),
+(8, 2, 2200, current_timestamp(), current_timestamp()),
+(8, 3, 2100, current_timestamp(), current_timestamp()),
+(8, 4, 2000, current_timestamp(), current_timestamp()),
+(8, 5, 2100, current_timestamp(), current_timestamp()),
+(8, 6, 1900, current_timestamp(), current_timestamp()),
+(8, 7, 2000, current_timestamp(), current_timestamp()),
+(8, 8, 2000, current_timestamp(), current_timestamp()),
+(8, 9, 2400, current_timestamp(), current_timestamp())
+;
