@@ -16,8 +16,8 @@ data class Category (
     val name: String,
 
     @CreatedDate
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime? = LocalDateTime.now(),
 
     @LastModifiedDate
-    val updatedAt: LocalDateTime?,
+    val updatedAt: LocalDateTime? = LocalDateTime.now(),
 )
