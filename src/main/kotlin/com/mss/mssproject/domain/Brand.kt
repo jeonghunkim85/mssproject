@@ -12,11 +12,12 @@ data class Brand(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
+    // unique
     val name: String,
 
     @CreatedDate
-    val createdAt: LocalDateTime?,
+    val createdAt: LocalDateTime? = LocalDateTime.now(),
 
     @LastModifiedDate
-    val updatedAt: LocalDateTime?,
+    val updatedAt: LocalDateTime? = LocalDateTime.now(),
 )

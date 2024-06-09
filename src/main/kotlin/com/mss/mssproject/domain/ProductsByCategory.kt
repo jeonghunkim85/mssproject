@@ -1,6 +1,7 @@
 package com.mss.mssproject.domain
 
 data class ProductsByCategory (
-    val cheapestProduct: Product,
-    val mostExpensiveProduct: Product,
+    val category: Category,
+    val cheapestProduct: List<Product>,
+    val mostExpensiveProduct: List<Product>,
 )
