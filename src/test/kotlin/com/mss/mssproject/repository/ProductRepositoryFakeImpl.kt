@@ -4,6 +4,8 @@ import com.mss.mssproject.domain.Brand
 import com.mss.mssproject.domain.Category
 import com.mss.mssproject.domain.Product
 import com.mss.mssproject.domain.ProductsByCategory
+import jakarta.persistence.Tuple
+import jakarta.persistence.TupleElement
 import org.springframework.boot.test.context.TestComponent
 
 @TestComponent
@@ -35,15 +37,24 @@ class ProductRepositoryFakeImpl: ProductRepository, AbstractCrudRepositoryFakeIm
             .values
             .toList()
 
-    override fun findCheapestAndMostExpensiveProductsByCategory(category: Category): ProductsByCategory {
+    override fun findCheapestAndMostExpensiveProductsByCategory(category: Category): List<Pair<String, Product>> {
         val categoryProducts = map.values.filter { it.category == category }
         val minPrice = categoryProducts.map { it.price }.min()
         val maxPrice = categoryProducts.map { it.price }.max()
 
-        return ProductsByCategory(
-            category = category,
-            cheapestProduct = categoryProducts.filter { it.price == minPrice },
-            mostExpensiveProduct = categoryProducts.filter { it.price == maxPrice },
-        )
+        return (categoryProducts.filter { it.price == minPrice }.map { "MIN" to it } +
+        categoryProducts.filter { it.price == maxPrice }.map { "MAX" to it })
     }
+
+//    override fun findCheapestAndMostExpensiveProductsByCategory(category: Category): ProductsByCategory {
+//        val categoryProducts = map.values.filter { it.category == category }
+//        val minPrice = categoryProducts.map { it.price }.min()
+//        val maxPrice = categoryProducts.map { it.price }.max()
+//
+//        return ProductsByCategory(
+//            category = category,
+//            cheapestProduct = categoryProducts.filter { it.price == minPrice },
+//            mostExpensiveProduct = categoryProducts.filter { it.price == maxPrice },
+//        )
+//    }
 }

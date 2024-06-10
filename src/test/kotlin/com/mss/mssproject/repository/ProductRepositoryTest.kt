@@ -5,13 +5,14 @@ import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.data.repository.findByIdOrNull
 import java.math.BigDecimal
 
-@DisplayName("ProductRepositoryCustomImpl Query Test")
+@DisplayName("ProductRepositoryTest Query Test")
 @DataJpaTest
-class ProductRepositoryCustomImplTest(
+class ProductRepositoryTest(
     private val productRepository: ProductRepository,
     private val categoryRepository: CategoryRepository,
     private val brandRepository: BrandRepository,
@@ -160,15 +161,23 @@ class ProductRepositoryCustomImplTest(
 
             val result = productRepository.findCheapestAndMostExpensiveProductsByCategory(category)
 
-            it("result.cheapest 는 C 브랜드의 가격은 10000 이다") {
-                result.cheapestProduct shouldHaveSize 1
-                result.cheapestProduct.first().brand.name shouldBe "C"
-                result.cheapestProduct.first().price shouldBe BigDecimal.valueOf(10_000)
+            it("result 는 2개의 item 을 갖고있다") {
+                result shouldHaveSize 2
             }
-            it("result.mostExpensive 는 I 브랜드의 가격은 11400 이다") {
-                result.mostExpensiveProduct shouldHaveSize 1
-                result.mostExpensiveProduct.first().brand.name shouldBe "I"
-                result.mostExpensiveProduct.first().price shouldBe BigDecimal.valueOf(11_400)
+
+            it("result 중 MIN 인 Product 결과는 C 브랜드의 가격은 10000 이다") {
+                val cheapestProduct = result.find { it.first == "MIN" }
+                cheapestProduct shouldNotBe null
+                checkNotNull(cheapestProduct)
+                cheapestProduct.second.brand.name shouldBe "C"
+                cheapestProduct.second.price shouldBe BigDecimal.valueOf(10_000)
+            }
+            it("result 중 MAX 인 Product 결과는 I 브랜드의 가격은 11400 이다") {
+                val mostExpensiveProduct = result.find { it.first == "MAX" }
+                mostExpensiveProduct shouldNotBe null
+                checkNotNull(mostExpensiveProduct)
+                mostExpensiveProduct.second.brand.name shouldBe "I"
+                mostExpensiveProduct.second.price shouldBe BigDecimal.valueOf(11_400)
             }
         }
 
@@ -184,20 +193,24 @@ class ProductRepositoryCustomImplTest(
             context("상의로 검색시") {
                 val result = productRepository.findCheapestAndMostExpensiveProductsByCategory(category)
 
-                it("result.cheapest 는 C, D 브랜드의 가격은 10000 이다") {
-                    result.cheapestProduct shouldHaveSize 2
-                    val productBrandC = result.cheapestProduct.find { it.brand.name == "C" }
-                    checkNotNull(productBrandC)
-                    productBrandC.price shouldBe BigDecimal.valueOf(10_000)
-
-                    val productBrandD = result.cheapestProduct.find { it.brand.name == "D" }
-                    checkNotNull(productBrandD)
-                    productBrandD.price shouldBe BigDecimal.valueOf(10_000)
+                it("result 는 3개의 아이템을 갖고 있다") {
+                    result shouldHaveSize 3
                 }
-                it("result.mostExpensive 는 I 브랜드의 가격은 11400 이다") {
-                    result.mostExpensiveProduct shouldHaveSize 1
-                    result.mostExpensiveProduct.first().brand.name shouldBe "I"
-                    result.mostExpensiveProduct.first().price shouldBe BigDecimal.valueOf(11_400)
+
+                it("result 중 MIN 인 Product 는 2개이고 브랜드는 C,D 가격은 10000 이다") {
+                    val cheapestProducts = result.filter { it.first == "MIN" }
+                    cheapestProducts shouldHaveSize 2
+                    val products = cheapestProducts.map { it.second }
+                    products.map { it.brand.name } shouldBe listOf("C", "D")
+                    products.all { it.price == BigDecimal.valueOf(10_000) } shouldBe true
+                }
+
+                it("result 중 MAX 인 Product 결과는 I 브랜드의 가격은 11400 이다") {
+                    val mostExpensiveProduct = result.find { it.first == "MAX" }
+                    mostExpensiveProduct shouldNotBe null
+                    checkNotNull(mostExpensiveProduct)
+                    mostExpensiveProduct.second.brand.name shouldBe "I"
+                    mostExpensiveProduct.second.price shouldBe BigDecimal.valueOf(11_400)
                 }
             }
         }
