@@ -1,25 +1,25 @@
 
-insert into categories (id, name, updated_at, created_at) values
-(1, '상의', current_timestamp(), current_timestamp()),
-(2, '아우터', current_timestamp(), current_timestamp()),
-(3, '바지', current_timestamp(), current_timestamp()),
-(4, '스니커즈', current_timestamp(), current_timestamp()),
-(5, '가방', current_timestamp(), current_timestamp()),
-(6, '모자', current_timestamp(), current_timestamp()),
-(7, '양말', current_timestamp(), current_timestamp()),
-(8, '액세서리', current_timestamp(), current_timestamp())
+insert into categories (name, updated_at, created_at) values
+('상의', current_timestamp(), current_timestamp()),
+('아우터', current_timestamp(), current_timestamp()),
+('바지', current_timestamp(), current_timestamp()),
+('스니커즈', current_timestamp(), current_timestamp()),
+('가방', current_timestamp(), current_timestamp()),
+('모자', current_timestamp(), current_timestamp()),
+('양말', current_timestamp(), current_timestamp()),
+('액세서리', current_timestamp(), current_timestamp())
 ;
 
-insert into brands (id, name, created_at, updated_at) values
-(1, 'A', current_timestamp(), current_timestamp()),
-(2, 'B', current_timestamp(), current_timestamp()),
-(3, 'C', current_timestamp(), current_timestamp()),
-(4, 'D', current_timestamp(), current_timestamp()),
-(5, 'E', current_timestamp(), current_timestamp()),
-(6, 'F', current_timestamp(), current_timestamp()),
-(7, 'G', current_timestamp(), current_timestamp()),
-(8, 'H', current_timestamp(), current_timestamp()),
-(9, 'I', current_timestamp(), current_timestamp())
+insert into brands (name, created_at, updated_at) values
+('A', current_timestamp(), current_timestamp()),
+('B', current_timestamp(), current_timestamp()),
+('C', current_timestamp(), current_timestamp()),
+('D', current_timestamp(), current_timestamp()),
+('E', current_timestamp(), current_timestamp()),
+('F', current_timestamp(), current_timestamp()),
+('G', current_timestamp(), current_timestamp()),
+('H', current_timestamp(), current_timestamp()),
+('I', current_timestamp(), current_timestamp())
 ;
 
 insert into products (category_id, brand_id, price, created_at, updated_at) values
