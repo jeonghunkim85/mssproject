@@ -2,7 +2,6 @@ package com.mss.mssproject.application
 
 import com.mss.mssproject.application.WriteProductUseCases.WriteProductModel
 import com.mss.mssproject.domain.Product
-import com.mss.mssproject.domain.ProductsByCategory
 import com.mss.mssproject.repository.BrandRepository
 import com.mss.mssproject.repository.CategoryRepository
 import com.mss.mssproject.repository.ProductRepository
@@ -16,22 +15,6 @@ class ProductService(
     private val productRepository: ProductRepository,
     private val brandRepository: BrandRepository,
 ): ReadProductUseCase, WriteProductUseCases {
-
-    @Transactional(readOnly = true)
-    override fun findCheapestAndMostExpensiveProductByCategoryName(categoryName: String): ProductsByCategory {
-        val category = categoryRepository.findByName(categoryName)
-        requireNotNull(category) { "cannot find category $categoryName" } // todo. 400 error 처리
-        val queryResult = productRepository.findCheapestAndMostExpensiveProductsByCategory(category)
-        return ProductsByCategory(
-            category = category,
-            cheapestProduct = queryResult
-                .filter { it.first == MIN }
-                .map { it.second },
-            mostExpensiveProduct = queryResult
-                .filter { it.first == MAX }
-                .map { it.second },
-        )
-    }
 
     override fun readProduct(id: Long): Product =
         productRepository.findByIdOrNull(id)

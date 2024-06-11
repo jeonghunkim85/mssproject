@@ -12,11 +12,11 @@ import java.math.BigDecimal
  * 본래 service 의 경우 fakeImpl 을 통한 unit test 를 주로 작성하나,
  * 적절한 쿼리 결과를 위한 데이터 셋팅의 효율성을 위해 JpaTest 를 활용합니다.
  */
-@Import(ProductService::class)
-@DisplayName("ProductService Test")
+@Import(CoordinateService::class)
+@DisplayName("CoordinateService Test")
 @DataJpaTest
-class ProductBizServiceTest(
-    private val readProductUseCase: ReadProductUseCase,
+class CoordinateServiceTest(
+    private val readCoordinateService: CoordinateService,
 ) : DescribeSpec({
     describe("findCheapestAndMostExpensiveProductByCategoryName 테스트") {
         /**
@@ -27,7 +27,7 @@ class ProductBizServiceTest(
          */
         context("DB 에 값이 셋팅 돼있고, 쿼리 시 적절한 결과를 return 해 줍니다") {
             context("readProductUseCase.findCheapestAndMostExpensiveProductByCategoryName('상의') 가 실행되면") {
-                val result = readProductUseCase.findCheapestAndMostExpensiveProductByCategoryName("상의")
+                val result = readCoordinateService.findCheapestAndMostExpensiveProductByCategoryName("상의")
                 it("result 의 category 는 id=1, name='상의' 입니다") {
                     result.category.id shouldBe 1L
                     result.category.name shouldBe "상의"

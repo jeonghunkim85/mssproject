@@ -7,7 +7,6 @@ import com.mss.mssproject.domain.Product
 import com.mss.mssproject.repository.*
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.BehaviorSpec
-import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
@@ -22,8 +21,8 @@ import java.math.BigDecimal
     BrandRepositoryFakeImpl::class,
     ProductService::class,
 )
-@DisplayName("ProductService CRUD Test")
-class ProductServiceCRUDTest(
+@DisplayName("ProductService Test")
+class ProductServiceTest(
     private val categoryRepository: CategoryRepository,
     private val brandRepository: BrandRepository,
     private val productRepository: ProductRepository,
