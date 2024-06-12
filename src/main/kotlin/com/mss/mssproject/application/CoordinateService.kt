@@ -25,7 +25,7 @@ class CoordinateService(
     @Transactional(readOnly = true)
     override fun findCoordinateByCheapestBrand(): CoordinateWithBrand {
         val brand = brandRepository.findCheapestBrand()
-            ?: error("failed to find cheapest brand") // todo. error 처리
+        checkNotNull(brand) { "cannot find cheapest brand" } // 정상적인 경우는 아니라 catch 하지 않음
         val products = productRepository.findCheapestProductsByBrand(brand)
         return CoordinateWithBrand(
             brand = brand,
@@ -36,7 +36,7 @@ class CoordinateService(
     @Transactional(readOnly = true)
     override fun findCheapestAndMostExpensiveProductByCategoryName(categoryName: String): ProductsByCategory {
         val category = categoryRepository.findByName(categoryName)
-        requireNotNull(category) { "cannot find category $categoryName" } // todo. 400 error 처리
+        checkNotNull(category) { "cannot find category $categoryName" }
         val queryResult = productRepository.findCheapestAndMostExpensiveProductsByCategory(category)
         return ProductsByCategory(
             category = category,

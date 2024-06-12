@@ -36,4 +36,16 @@ class GlobalExceptionConfig {
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler
     fun conflictExceptionHandler(error: ConflictException): BasicExceptionMessage = error.toBasicExceptionMessage()
+
+    /**
+     * 대부분 controller 에서 변환해서 내리나,
+     * catch 를 누락한 경우 아래와 같은 형태로 변환해서 내리도록 handling 합니다
+     */
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    @ExceptionHandler
+    fun rootErrorHandler(error: Exception): BasicExceptionMessage = BasicExceptionMessage(
+        code = HttpStatus.INTERNAL_SERVER_ERROR,
+        message = error.message
+    )
 }

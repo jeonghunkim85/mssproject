@@ -18,14 +18,15 @@ class ProductService(
 
     override fun readProduct(id: Long): Product =
         productRepository.findByIdOrNull(id)
-            ?: throw NoSuchElementException("cannot find product(id=$id)") // todo. 404
+            ?: throw NoSuchElementException("cannot find product(id=$id)")
 
     @Transactional(readOnly = false)
     override fun postProduct(registerModel: WriteProductModel): Product {
         val brand = brandRepository.findByIdOrNull(registerModel.brandId)
-            ?: throw IllegalArgumentException("cannot find brand ${registerModel.brandId}") // todo. 400
         val category = categoryRepository.findByIdOrNull(registerModel.categoryId)
-            ?: throw IllegalArgumentException("cannot find category ${registerModel.categoryId}")
+
+        checkNotNull(brand) { "cannot find brand ${registerModel.brandId}" }
+        checkNotNull(category){ "cannot find category ${registerModel.categoryId}" }
 
         val productToPersist = Product(
             brand = brand,
@@ -39,9 +40,10 @@ class ProductService(
     override fun putProduct(id: Long, registerModel: WriteProductModel): Product {
         val existingProduct = productRepository.findByIdOrNull(id)
         val brand = brandRepository.findByIdOrNull(registerModel.brandId)
-            ?: throw IllegalArgumentException("cannot find brand ${registerModel.brandId}")
         val category = categoryRepository.findByIdOrNull(registerModel.categoryId)
-            ?: throw IllegalArgumentException("cannot find category ${registerModel.categoryId}")
+
+        checkNotNull(brand) { "cannot find brand ${registerModel.brandId}" }
+        checkNotNull(category) { "cannot find category ${registerModel.categoryId}" }
 
         val productToPersist = existingProduct?.copy(
             price = registerModel.price,
