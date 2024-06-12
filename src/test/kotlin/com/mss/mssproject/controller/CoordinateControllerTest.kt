@@ -3,6 +3,7 @@ package com.mss.mssproject.controller
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.mss.mssproject.application.CoordinateUseCases
+import com.mss.mssproject.extension.contentAsTree
 import com.ninjasquad.springmockk.SpykBean
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.DescribeSpec
@@ -56,7 +57,6 @@ class CoordinateControllerTest(
                 }
 
                 it("결과 contents 는 아래와 같다") {
-                    val result = objectMapper.readTree(response.getContentAsString(Charsets.UTF_8))
                     val expected = objectMapper.readTree("""
                         {
                           "최저가": {
@@ -106,8 +106,7 @@ class CoordinateControllerTest(
                           }
                         }
                     """)
-
-                    result shouldBe expected
+                    response.contentAsTree shouldBe expected
                 }
             }
         }
@@ -169,8 +168,7 @@ class CoordinateControllerTest(
                           }
                         }
                     """)
-                    val result = objectMapper.readTree(response.getContentAsString(Charsets.UTF_8))
-                    result shouldBe expected
+                    response.contentAsTree shouldBe expected
                 }
             }
         }
@@ -236,8 +234,7 @@ class CoordinateControllerTest(
                           ]
                         }
                     """)
-                    val result = objectMapper.readTree(response.getContentAsString(Charsets.UTF_8))
-                    result shouldBe expected
+                    response.contentAsTree shouldBe expected
                 }
             }
         }
