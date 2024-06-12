@@ -16,7 +16,7 @@ class CoordinateService(
     private val brandRepository: BrandRepository,
     private val categoryRepository: CategoryRepository,
     private val productRepository: ProductRepository,
-): CoordinateUseCases {
+) : CoordinateUseCases {
     override fun findCheapestCoordinate(): Coordinate {
         val products = productRepository.findCheapestProductsByAllCategory()
         return Coordinate(products)
@@ -40,12 +40,14 @@ class CoordinateService(
         val queryResult = productRepository.findCheapestAndMostExpensiveProductsByCategory(category)
         return ProductsByCategory(
             category = category,
-            cheapestProduct = queryResult
-                .filter { it.first == MIN }
-                .map { it.second },
-            mostExpensiveProduct = queryResult
-                .filter { it.first == MAX }
-                .map { it.second },
+            cheapestProduct =
+                queryResult
+                    .filter { it.first == MIN }
+                    .map { it.second },
+            mostExpensiveProduct =
+                queryResult
+                    .filter { it.first == MAX }
+                    .map { it.second },
         )
     }
 }

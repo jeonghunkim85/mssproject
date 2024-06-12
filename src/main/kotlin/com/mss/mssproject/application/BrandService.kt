@@ -12,7 +12,8 @@ import org.springframework.transaction.annotation.Transactional
 class BrandService(
     private val brandRepository: BrandRepository,
     private val productRepository: ProductRepository,
-): ReadBrandUseCases, WriteBrandUseCases {
+) : ReadBrandUseCases,
+    WriteBrandUseCases {
     override fun getBrandByName(name: String): Brand =
         brandRepository.findByName(name)
             ?: throw NoSuchElementException("cannot find brand(name=$name)")
@@ -21,26 +22,29 @@ class BrandService(
         brandRepository.findByIdOrNull(id)
             ?: throw NoSuchElementException("cannot find brand(id=$id)")
 
-    override fun postBrand(brand: WriteBrandModel): Brand =
-        brandRepository.save(brand.toBrand())
+    override fun postBrand(brand: WriteBrandModel): Brand = brandRepository.save(brand.toBrand())
 
     @Transactional(readOnly = false)
-    override fun putBrand(id: Long, brand: WriteBrandModel): Brand {
+    override fun putBrand(
+        id: Long,
+        brand: WriteBrandModel,
+    ): Brand {
         val existingBrand = brandRepository.findByIdOrNull(id)
-        val brandToPersist = existingBrand?.copy(
-            name = brand.name
-        ) ?: brand.toBrand(id = id)
+        val brandToPersist =
+            existingBrand?.copy(
+                name = brand.name,
+            ) ?: brand.toBrand(id = id)
         return brandRepository.save(brandToPersist)
     }
 
     @Transactional(readOnly = false)
     override fun deleteBrand(id: Long) {
-        if(!brandRepository.existsById(id)) {
+        if (!brandRepository.existsById(id)) {
             throw NoSuchElementException("cannot find brand(id=$id)")
         }
 
         val existingProductsCount = productRepository.countAllByBrandId(id)
-        if(existingProductsCount > 0) {
+        if (existingProductsCount > 0) {
             throw IllegalStateException("there are $existingProductsCount products persisted. cannot delete.")
         }
 

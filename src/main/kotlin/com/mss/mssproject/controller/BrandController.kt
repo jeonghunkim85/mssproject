@@ -9,9 +9,15 @@ import com.mss.mssproject.exception.ConflictException
 import com.mss.mssproject.exception.NotFoundException
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.*
-import org.springframework.web.server.ResponseStatusException
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/brands")
@@ -21,12 +27,15 @@ class BrandController(
 ) {
     @Operation(summary = "브랜드 조회")
     @GetMapping("/{id}")
-    fun getBrand(@PathVariable id: Long): BrandView {
-        val brand = try {
-            readBrandUseCases.getBrand(id)
-        } catch (nse: NoSuchElementException) {
-            throw NotFoundException(nse.message)
-        }
+    fun getBrand(
+        @PathVariable id: Long,
+    ): BrandView {
+        val brand =
+            try {
+                readBrandUseCases.getBrand(id)
+            } catch (nse: NoSuchElementException) {
+                throw NotFoundException(nse.message)
+            }
         return BrandView(brand)
     }
 
@@ -34,16 +43,17 @@ class BrandController(
     @GetMapping
     fun findBrands(
         @RequestParam(name = "name", required = false)
-        name: String?
+        name: String?,
     ): List<BrandView> {
-        if(name.isNullOrBlank()) {
+        if (name.isNullOrBlank()) {
             throw BadRequestException("requestParam 'name' should not be null or blank")
         }
-        val brand = try {
-            readBrandUseCases.getBrandByName(name.trim())
-        } catch (nse: NoSuchElementException) {
-            throw NotFoundException(nse)
-        }
+        val brand =
+            try {
+                readBrandUseCases.getBrandByName(name.trim())
+            } catch (nse: NoSuchElementException) {
+                throw NotFoundException(nse)
+            }
         return listOf(BrandView(brand))
     }
 
@@ -76,7 +86,9 @@ class BrandController(
 
     @Operation(summary = "브랜드 삭제")
     @DeleteMapping("/{id}")
-    fun deleteBrand(@PathVariable id: Long) {
+    fun deleteBrand(
+        @PathVariable id: Long,
+    ) {
         try {
             writeBrandUseCases.deleteBrand(id)
         } catch (ise: IllegalStateException) {

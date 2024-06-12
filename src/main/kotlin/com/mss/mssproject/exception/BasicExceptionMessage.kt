@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatusCode
 
 open class BasicExceptionMessage(
     open val code: HttpStatusCode,
-    open val message: String?
+    open val message: String?,
 )
 
 class ValidationExceptionMessage(

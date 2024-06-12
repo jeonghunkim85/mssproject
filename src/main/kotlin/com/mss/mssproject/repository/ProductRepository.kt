@@ -6,11 +6,11 @@ import com.mss.mssproject.domain.Product
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
-interface ProductRepository: CrudRepository<Product, Long> {
-
+interface ProductRepository : CrudRepository<Product, Long> {
     fun countAllByBrandId(brandId: Long): Long
 
-    @Query("""
+    @Query(
+        """
         select p 
         from Product p join
             ( select 
@@ -19,10 +19,12 @@ interface ProductRepository: CrudRepository<Product, Long> {
             from Product a) z on (p.id = z.id)
         where z.min_rank = 1
         order by p.category.id asc
-    """)
+    """,
+    )
     fun findCheapestProductsByAllCategory(): List<Product>
 
-    @Query("""
+    @Query(
+        """
         select p 
         from Product p join
             (select 
@@ -31,10 +33,12 @@ interface ProductRepository: CrudRepository<Product, Long> {
             from Product a) z on (p.id = z.id)
         where z.min_rank = 1 
         and p.brand = :brand
-    """)
+    """,
+    )
     fun findCheapestProductsByBrand(brand: Brand): List<Product>
 
-    @Query("""
+    @Query(
+        """
         select
             NEW kotlin.Pair(
                 case when r.min_rank = 1 then 'MIN' 
@@ -51,6 +55,7 @@ interface ProductRepository: CrudRepository<Product, Long> {
         where
             p.category = :category
             and (r.min_rank = 1 or r.max_rank = 1)
-    """)
+    """,
+    )
     fun findCheapestAndMostExpensiveProductsByCategory(category: Category): List<Pair<String, Product>>
 }

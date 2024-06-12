@@ -1,6 +1,10 @@
 package com.mss.mssproject.config
 
-import com.mss.mssproject.exception.*
+import com.mss.mssproject.exception.BadRequestException
+import com.mss.mssproject.exception.BasicExceptionMessage
+import com.mss.mssproject.exception.ConflictException
+import com.mss.mssproject.exception.NotFoundException
+import com.mss.mssproject.exception.ValidationExceptionMessage
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -10,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 
 @RestControllerAdvice
 class GlobalExceptionConfig {
-
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler
@@ -44,8 +47,9 @@ class GlobalExceptionConfig {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     @ExceptionHandler
-    fun rootErrorHandler(error: Exception): BasicExceptionMessage = BasicExceptionMessage(
-        code = HttpStatus.INTERNAL_SERVER_ERROR,
-        message = error.message
-    )
+    fun rootErrorHandler(error: Exception): BasicExceptionMessage =
+        BasicExceptionMessage(
+            code = HttpStatus.INTERNAL_SERVER_ERROR,
+            message = error.message,
+        )
 }

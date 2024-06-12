@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
         "com.mss.mssproject.application",
         "com.mss.mssproject.controller",
         "com.mss.mssproject.repository",
-    ]
+    ],
 )
 @AutoConfigureDataJpa
 @AutoConfigureMockMvc
@@ -32,32 +32,35 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 @DisplayName("CoordinateService test")
 class CoordinateControllerTest(
     private var mockMvc: MockMvc,
-
     @SpykBean
     private val coordinateUseCases: CoordinateUseCases,
 ) : DescribeSpec({
 
-    val objectMapper = jacksonObjectMapper()
+        val objectMapper = jacksonObjectMapper()
 
-    afterContainer {
-        clearAllMocks()
-    }
+        afterContainer {
+            clearAllMocks()
+        }
 
-    describe("getCheapest test") {
-        context("coordinateUseCases.findCheapestCoordinate 가 호출되면 응답을 준다") {
-            context("/coordinates/cheapest 가 호출되면") {
-                val response = mockMvc.perform(
-                    get("/coordinates/cheapest")
-                        .contentType(MediaType.APPLICATION_JSON)
-                ).andReturn()
-                    .response
+        describe("getCheapest test") {
+            context("coordinateUseCases.findCheapestCoordinate 가 호출되면 응답을 준다") {
+                context("/coordinates/cheapest 가 호출되면") {
+                    val response =
+                        mockMvc
+                            .perform(
+                                get("/coordinates/cheapest")
+                                    .contentType(MediaType.APPLICATION_JSON),
+                            ).andReturn()
+                            .response
 
-                it("response.status 는 200 이다") {
-                    response.status shouldBe 200
-                }
+                    it("response.status 는 200 이다") {
+                        response.status shouldBe 200
+                    }
 
-                it("결과 contents 는 아래와 같다") {
-                    val expected = objectMapper.readTree("""
+                    it("결과 contents 는 아래와 같다") {
+                        val expected =
+                            objectMapper.readTree(
+                                """
                         {
                           "최저가": {
                             "카테고리": [
@@ -105,28 +108,33 @@ class CoordinateControllerTest(
                             "총액": "34,100"
                           }
                         }
-                    """)
-                    response.contentAsTree shouldBe expected
+                    """,
+                            )
+                        response.contentAsTree shouldBe expected
+                    }
                 }
             }
         }
-    }
 
-    describe("/coordinates/cheapest-by-brand 테스트") {
-        context("coordinateUseCases.findCoordinateByCheapestBrand 가 호출되면 응답을 준다") {
-            context("/coordinates/cheapest-by-brand 가 호출되면") {
-                val response = mockMvc.perform(
-                    get("/coordinates/cheapest-by-brand")
-                        .contentType(MediaType.APPLICATION_JSON)
-                ).andReturn()
-                    .response
+        describe("/coordinates/cheapest-by-brand 테스트") {
+            context("coordinateUseCases.findCoordinateByCheapestBrand 가 호출되면 응답을 준다") {
+                context("/coordinates/cheapest-by-brand 가 호출되면") {
+                    val response =
+                        mockMvc
+                            .perform(
+                                get("/coordinates/cheapest-by-brand")
+                                    .contentType(MediaType.APPLICATION_JSON),
+                            ).andReturn()
+                            .response
 
-                it("response.status 는 200 이다") {
-                    response.status shouldBe 200
-                }
+                    it("response.status 는 200 이다") {
+                        response.status shouldBe 200
+                    }
 
-                it("결과 contents 는 아래와 같다") {
-                    val expected = objectMapper.readTree("""
+                    it("결과 contents 는 아래와 같다") {
+                        val expected =
+                            objectMapper.readTree(
+                                """
                         {
                           "최저가": {
                             "브랜드": "D",
@@ -167,55 +175,62 @@ class CoordinateControllerTest(
                             "총액": "36,100"
                           }
                         }
-                    """)
-                    response.contentAsTree shouldBe expected
+                    """,
+                            )
+                        response.contentAsTree shouldBe expected
+                    }
+                }
+            }
+
+            context("coordinateService.findCoordinateByCheapestBrand 가 호출되면 IllegalStateException 이 난다") {
+                beforeContainer {
+                    every {
+                        coordinateUseCases.findCoordinateByCheapestBrand()
+                    } throws IllegalStateException("테스트 메세지")
+                }
+                context("/coordinates/cheapest-by-brand 가 호출되면") {
+
+                    val response =
+                        mockMvc
+                            .perform(
+                                get("/coordinates/cheapest-by-brand")
+                                    .contentType(MediaType.APPLICATION_JSON),
+                            ).andReturn()
+                            .response
+
+                    it("response status code 는 500 이다") {
+                        response.status shouldBe 500
+                    }
+
+                    it("response content 는 아래와 같다") {
+                        val result: Map<String, Any> = objectMapper.readValue(response.getContentAsString(Charsets.UTF_8))
+                        result["code"] shouldBe "INTERNAL_SERVER_ERROR"
+                        result["message"] shouldBe "테스트 메세지"
+                    }
                 }
             }
         }
 
-        context("coordinateService.findCoordinateByCheapestBrand 가 호출되면 IllegalStateException 이 난다") {
-            beforeContainer {
-                every {
-                    coordinateUseCases.findCoordinateByCheapestBrand()
-                } throws IllegalStateException("테스트 메세지")
-            }
-            context("/coordinates/cheapest-by-brand 가 호출되면") {
+        describe("/coordinates/cheapest-and-most-expensive 테스트") {
+            context("coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName(상의) 가 호출되면 응답을 준다") {
+                context("/coordinates/cheapest-by-brand?category_name=상의 가 호출되면") {
+                    val response =
+                        mockMvc
+                            .perform(
+                                get("/coordinates/cheapest-and-most-expensive")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .param("category_name", "상의"),
+                            ).andReturn()
+                            .response
 
-                val response = mockMvc.perform(
-                    get("/coordinates/cheapest-by-brand")
-                        .contentType(MediaType.APPLICATION_JSON)
-                ).andReturn()
-                    .response
+                    it("response.status 는 200 이다") {
+                        response.status shouldBe 200
+                    }
 
-                it("response status code 는 500 이다") {
-                    response.status shouldBe 500
-                }
-
-                it("response content 는 아래와 같다") {
-                    val result: Map<String, Any> = objectMapper.readValue(response.getContentAsString(Charsets.UTF_8))
-                    result["code"] shouldBe "INTERNAL_SERVER_ERROR"
-                    result["message"] shouldBe "테스트 메세지"
-                }
-            }
-        }
-    }
-
-    describe("/coordinates/cheapest-and-most-expensive 테스트") {
-        context("coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName(상의) 가 호출되면 응답을 준다") {
-            context("/coordinates/cheapest-by-brand?category_name=상의 가 호출되면") {
-                val response = mockMvc.perform(
-                    get("/coordinates/cheapest-and-most-expensive")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("category_name", "상의")
-                ).andReturn()
-                    .response
-
-                it("response.status 는 200 이다") {
-                    response.status shouldBe 200
-                }
-
-                it("response.content 는 아래와 같다") {
-                    val expected = objectMapper.readTree("""
+                    it("response.content 는 아래와 같다") {
+                        val expected =
+                            objectMapper.readTree(
+                                """
                         {
                           "카테고리": "상의",
                           "최저가": [
@@ -233,27 +248,51 @@ class CoordinateControllerTest(
                             }
                           ]
                         }
-                    """)
-                    response.contentAsTree shouldBe expected
+                    """,
+                            )
+                        response.contentAsTree shouldBe expected
+                    }
                 }
             }
-        }
 
-        context("""coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName(not_valid_category_name) 
-            가 호출되면 IllegalStateException 을 준다"""
-        ) {
-            beforeContainer {
-                every {
-                    coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName("not_valid_category_name")
-                } throws IllegalStateException("cannot find category not_valid_category_name")
+            context(
+                """coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName(not_valid_category_name) 
+            가 호출되면 IllegalStateException 을 준다""",
+            ) {
+                beforeContainer {
+                    every {
+                        coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName("not_valid_category_name")
+                    } throws IllegalStateException("cannot find category not_valid_category_name")
+                }
+                context("/coordinates/cheapest-by-brand?category_name=상의 가 호출되면") {
+                    val response =
+                        mockMvc
+                            .perform(
+                                get("/coordinates/cheapest-and-most-expensive")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .param("category_name", "not_valid_category_name"),
+                            ).andReturn()
+                            .response
+
+                    it("response status 는 400 이다") {
+                        response.status shouldBe 400
+                    }
+                    it("response content 는 아래와 같다") {
+                        val result: Map<String, Any> = objectMapper.readValue(response.getContentAsString(Charsets.UTF_8))
+                        result["code"] shouldBe "BAD_REQUEST"
+                        result["message"] shouldBe "cannot find category not_valid_category_name"
+                    }
+                }
             }
-            context("/coordinates/cheapest-by-brand?category_name=상의 가 호출되면") {
-                val response = mockMvc.perform(
-                    get("/coordinates/cheapest-and-most-expensive")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .param("category_name", "not_valid_category_name")
-                ).andReturn()
-                    .response
+
+            context("/coordinates/cheapest-by-brand 가 category_name param 없이 호출되면") {
+                val response =
+                    mockMvc
+                        .perform(
+                            get("/coordinates/cheapest-and-most-expensive")
+                                .contentType(MediaType.APPLICATION_JSON),
+                        ).andReturn()
+                        .response
 
                 it("response status 는 400 이다") {
                     response.status shouldBe 400
@@ -261,26 +300,8 @@ class CoordinateControllerTest(
                 it("response content 는 아래와 같다") {
                     val result: Map<String, Any> = objectMapper.readValue(response.getContentAsString(Charsets.UTF_8))
                     result["code"] shouldBe "BAD_REQUEST"
-                    result["message"] shouldBe "cannot find category not_valid_category_name"
+                    result["message"]?.toString() shouldContain "category_name must not be blank"
                 }
             }
         }
-
-        context("/coordinates/cheapest-by-brand 가 category_name param 없이 호출되면") {
-            val response = mockMvc.perform(
-                get("/coordinates/cheapest-and-most-expensive")
-                    .contentType(MediaType.APPLICATION_JSON)
-            ).andReturn()
-                .response
-
-            it("response status 는 400 이다") {
-                response.status shouldBe 400
-            }
-            it("response content 는 아래와 같다") {
-                val result: Map<String, Any> = objectMapper.readValue(response.getContentAsString(Charsets.UTF_8))
-                result["code"] shouldBe "BAD_REQUEST"
-                result["message"]?.toString() shouldContain "category_name must not be blank"
-            }
-        }
-    }
-})
+    })

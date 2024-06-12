@@ -1,16 +1,14 @@
 package com.mss.mssproject.repository
 
 import org.springframework.data.repository.CrudRepository
-import java.util.*
+import java.util.Optional
 
-abstract class AbstractCrudRepositoryFakeImpl<T: Any, ID: Any>: CrudRepository<T, ID> {
+abstract class AbstractCrudRepositoryFakeImpl<T : Any, ID : Any> : CrudRepository<T, ID> {
     protected val map: MutableMap<ID, T> = mutableMapOf()
 
-    override fun <S : T> saveAll(entities: MutableIterable<S>): MutableIterable<S> =
-        entities.map { save(it) }.toMutableList()
+    override fun <S : T> saveAll(entities: MutableIterable<S>): MutableIterable<S> = entities.map { save(it) }.toMutableList()
 
-    override fun findById(id: ID): Optional<T> =
-        Optional.ofNullable(map[id])
+    override fun findById(id: ID): Optional<T> = Optional.ofNullable(map[id])
 
     override fun existsById(id: ID): Boolean = id in map
 

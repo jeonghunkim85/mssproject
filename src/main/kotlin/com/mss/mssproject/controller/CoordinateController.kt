@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/coordinates")
 @RestController
 class CoordinateController(
-    private val coordinateUseCases: CoordinateUseCases
+    private val coordinateUseCases: CoordinateUseCases,
 ) {
-
     @Operation(summary = "카테고리별 최저가격 브랜드와 상품 가격, 총액을 조회하는 API")
     @GetMapping("/cheapest")
     fun getCheapest(): CoordinateViewWrapper<CoordinateView> {
@@ -30,8 +29,9 @@ class CoordinateController(
 
     @Operation(
         summary = "단일 브랜드 카테고리별 최저 상품 가격, 총액 조회 API",
-        description = "단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격에 판매하는 브랜드와" +
-                "카테고리의 상품가격, 총액을 조회하는 API"
+        description =
+            "단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격에 판매하는 브랜드와" +
+                "카테고리의 상품가격, 총액을 조회하는 API",
     )
     @GetMapping("/cheapest-by-brand")
     fun getCheapestByBrand(): CoordinateViewWrapper<CoordinateWithBrandView> {
@@ -44,21 +44,22 @@ class CoordinateController(
     fun findCheapestAndMostExpensiveProductByCategory(
         @RequestParam(name = "category_name", required = true)
         categoryName: String?,
-    ) : CheapestAndMostExpensiveProductByCategoryView {
-        if(categoryName.isNullOrBlank()) {
+    ): CheapestAndMostExpensiveProductByCategoryView {
+        if (categoryName.isNullOrBlank()) {
             throw BadRequestException("category_name must not be blank")
         }
-        val result = try {
-            coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName(categoryName)
-        }catch (ise: IllegalStateException) {
-            throw BadRequestException(ise.message)
-        }
+        val result =
+            try {
+                coordinateUseCases.findCheapestAndMostExpensiveProductByCategoryName(categoryName)
+            } catch (ise: IllegalStateException) {
+                throw BadRequestException(ise.message)
+            }
         return CheapestAndMostExpensiveProductByCategoryView(result)
     }
 
     data class CoordinateViewWrapper<T>(
         @JsonProperty("최저가")
-        val cheapest: T
+        val cheapest: T,
     )
 
     data class CheapestAndMostExpensiveProductByCategoryView(
@@ -69,10 +70,10 @@ class CoordinateController(
         @JsonProperty("최고가")
         val mostExpensiveProduct: List<ProductWithBrandView>,
     ) {
-        constructor(productsByCategory: ProductsByCategory): this(
+        constructor(productsByCategory: ProductsByCategory) : this(
             categoryName = productsByCategory.category.name,
             cheapestProduct = productsByCategory.cheapestProduct.map { it.toDtoWithBrand() },
-            mostExpensiveProduct = productsByCategory.mostExpensiveProduct.map { it.toDtoWithBrand() }
+            mostExpensiveProduct = productsByCategory.mostExpensiveProduct.map { it.toDtoWithBrand() },
         )
     }
 }

@@ -14,8 +14,8 @@ class ProductService(
     private val categoryRepository: CategoryRepository,
     private val productRepository: ProductRepository,
     private val brandRepository: BrandRepository,
-): ReadProductUseCase, WriteProductUseCases {
-
+) : ReadProductUseCase,
+    WriteProductUseCases {
     override fun readProduct(id: Long): Product =
         productRepository.findByIdOrNull(id)
             ?: throw NoSuchElementException("cannot find product(id=$id)")
@@ -26,18 +26,22 @@ class ProductService(
         val category = categoryRepository.findByIdOrNull(registerModel.categoryId)
 
         checkNotNull(brand) { "cannot find brand ${registerModel.brandId}" }
-        checkNotNull(category){ "cannot find category ${registerModel.categoryId}" }
+        checkNotNull(category) { "cannot find category ${registerModel.categoryId}" }
 
-        val productToPersist = Product(
-            brand = brand,
-            category = category,
-            price = registerModel.price
-        )
+        val productToPersist =
+            Product(
+                brand = brand,
+                category = category,
+                price = registerModel.price,
+            )
         return productRepository.save(productToPersist)
     }
 
     @Transactional(readOnly = false)
-    override fun putProduct(id: Long, registerModel: WriteProductModel): Product {
+    override fun putProduct(
+        id: Long,
+        registerModel: WriteProductModel,
+    ): Product {
         val existingProduct = productRepository.findByIdOrNull(id)
         val brand = brandRepository.findByIdOrNull(registerModel.brandId)
         val category = categoryRepository.findByIdOrNull(registerModel.categoryId)
@@ -45,23 +49,24 @@ class ProductService(
         checkNotNull(brand) { "cannot find brand ${registerModel.brandId}" }
         checkNotNull(category) { "cannot find category ${registerModel.categoryId}" }
 
-        val productToPersist = existingProduct?.copy(
-            price = registerModel.price,
-            brand = brand,
-            category = category
-        ) ?: Product(
-            id = id,
-            price = registerModel.price,
-            brand = brand,
-            category = category
-        )
+        val productToPersist =
+            existingProduct?.copy(
+                price = registerModel.price,
+                brand = brand,
+                category = category,
+            ) ?: Product(
+                id = id,
+                price = registerModel.price,
+                brand = brand,
+                category = category,
+            )
 
         return productRepository.save(productToPersist)
     }
 
     @Transactional(readOnly = false)
     override fun deleteProduct(id: Long) {
-        if(!productRepository.existsById(id)) {
+        if (!productRepository.existsById(id)) {
             throw NoSuchElementException("cannot find product $id to delete")
         }
         productRepository.deleteById(id)

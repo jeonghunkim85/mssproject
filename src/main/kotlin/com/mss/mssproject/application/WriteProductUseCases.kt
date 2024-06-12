@@ -6,11 +6,14 @@ import java.math.BigDecimal
 interface WriteProductUseCases {
     fun postProduct(product: WriteProductModel): Product
 
-    fun putProduct(id: Long, registerModel: WriteProductModel): Product
+    fun putProduct(
+        id: Long,
+        registerModel: WriteProductModel,
+    ): Product
 
     fun deleteProduct(id: Long)
 
-    data class WriteProductModel (
+    data class WriteProductModel(
         val categoryId: Long,
         val brandId: Long,
         val price: BigDecimal,

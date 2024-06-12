@@ -4,10 +4,11 @@ import com.mss.mssproject.domain.Brand
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
-interface BrandRepository: CrudRepository<Brand, Long> {
+interface BrandRepository : CrudRepository<Brand, Long> {
     fun findByName(name: String): Brand?
 
-    @Query("""
+    @Query(
+        """
         select z.brand
             from (
                 select p.id as id,
@@ -20,6 +21,7 @@ interface BrandRepository: CrudRepository<Brand, Long> {
             group by z.brand
             order by sum(z.price)
             limit 1
-    """)
+    """,
+    )
     fun findCheapestBrand(): Brand?
 }
