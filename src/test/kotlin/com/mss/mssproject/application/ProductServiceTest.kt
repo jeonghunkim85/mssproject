@@ -168,10 +168,10 @@ class ProductServiceTest(
                         kotlin.runCatching {
                             productService.postProduct(writeProductModel)
                         }
-                    Then("IllegalArgumentException 가 난다") {
+                    Then("IllegalStateException 가 난다") {
                         val exception = result.exceptionOrNull()
                         exception shouldNotBe null
-                        exception.shouldBeInstanceOf<IllegalArgumentException>()
+                        exception.shouldBeInstanceOf<IllegalStateException>()
                     }
                 }
                 When("putProduct 가 실행되면") {
@@ -185,10 +185,10 @@ class ProductServiceTest(
                         kotlin.runCatching {
                             productService.putProduct(1L, writeProductModel)
                         }
-                    Then("IllegalArgumentException 가 난다") {
+                    Then("IllegalStateException 가 난다") {
                         val exception = result.exceptionOrNull()
                         exception shouldNotBe null
-                        exception.shouldBeInstanceOf<IllegalArgumentException>()
+                        exception.shouldBeInstanceOf<IllegalStateException>()
                     }
                 }
             }
@@ -210,10 +210,10 @@ class ProductServiceTest(
                         kotlin.runCatching {
                             productService.postProduct(writeProductModel)
                         }
-                    Then("IllegalArgumentException 가 난다") {
+                    Then("IllegalStateException 가 난다") {
                         val exception = result.exceptionOrNull()
                         exception shouldNotBe null
-                        exception.shouldBeInstanceOf<IllegalArgumentException>()
+                        exception.shouldBeInstanceOf<IllegalStateException>()
                     }
                 }
                 When("putProduct 가 실행되면") {
@@ -227,10 +227,10 @@ class ProductServiceTest(
                         kotlin.runCatching {
                             productService.putProduct(1L, writeProductModel)
                         }
-                    Then("IllegalArgumentException 가 난다") {
+                    Then("IllegalStateException 가 난다") {
                         val exception = result.exceptionOrNull()
                         exception shouldNotBe null
-                        exception.shouldBeInstanceOf<IllegalArgumentException>()
+                        exception.shouldBeInstanceOf<IllegalStateException>()
                     }
                 }
             }
